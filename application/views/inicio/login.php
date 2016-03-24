@@ -57,8 +57,11 @@ $div=intval(100/count($bg));
             <label for="frmacceso_pwd">Contraseña:</label>
             <input type="password" class="form-control" id="frmacceso_pwd" name="frmacceso_pwd" maxlength="250" />
         </div>
+        <div class="form-group centro">
+            <a href="#">¿Olvido su contraseña?</a>
+        </div>
         <div class="form-group">
-            <button type="button" class="btn btn-primary btn-block">Accesar</button>
+            <button type="button" class="btn btn-primary btn-block" onclick="location.href='<?= base_url('inicio/principal'); ?>'">Accesar</button>
         </div>
     </form>
 </div>
