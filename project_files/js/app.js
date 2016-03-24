@@ -345,3 +345,14 @@ function estandarizaTamanio()
             $("#pageFooter").css('top',parseInt($("#pageSuperBodyContainer").css('top').replace("px",""))+altoPageSuperBodyContainer+"px");
     }
 }
+
+function fnAppExec()
+{
+    this.ButtonPanelToggle=function(btnPadre)
+    {
+        $(btnPadre.getElementsByTagName('span')[0]).toggle();
+        $(btnPadre.getElementsByTagName('span')[1]).toggle();
+    }
+}
+
+var AppExec = new fnAppExec();

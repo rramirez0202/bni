@@ -12,11 +12,11 @@ $config["footer"]="BNI Centro. Todos los Derechos Reservados";
 
 $config["navBarMenu"]=array(
     array("id"=>"1",    "item"=>"Inicio",           "permiso"=>0,   "url"=>"inicio/principal",  "subitems"=>array()),
-    array("id"=>"2",    "item"=>"Documentos",       "permiso"=>0,   "url"=>"documentos",        "subitems"=>array()),
-    array("id"=>"3",    "item"=>"Proyectos",        "permiso"=>0,   "url"=>"proyectos",         "subitems"=>array()),
-    array("id"=>"3",    "item"=>"Procesos",         "permiso"=>0,   "url"=>"procesos",          "subitems"=>array()),
-    array("id"=>"3",    "item"=>"Grupos",           "permiso"=>0,   "url"=>"grupos",            "subitems"=>array()),
-    array("id"=>"3",    "item"=>"Administración",   "permiso"=>0,   "url"=>"administracion",    "subitems"=>array()),
-    array("id"=>"3",    "item"=>"Configuración",    "permiso"=>0,   "url"=>"configuracion",     "subitems"=>array())
+    array("id"=>"2",    "item"=>"Documentos",       "permiso"=>0,   "url"=>"inicio/principal",  "subitems"=>array()),
+    array("id"=>"3",    "item"=>"Proyectos",        "permiso"=>0,   "url"=>"inicio/principal",  "subitems"=>array()),
+    array("id"=>"4",    "item"=>"Procesos",         "permiso"=>0,   "url"=>"inicio/principal",  "subitems"=>array()),
+    array("id"=>"5",    "item"=>"Grupos",           "permiso"=>0,   "url"=>"inicio/principal",  "subitems"=>array()),
+    array("id"=>"6",    "item"=>"Administración",   "permiso"=>0,   "url"=>"inicio/principal",  "subitems"=>array()),
+    array("id"=>"7",    "item"=>"Configuración",    "permiso"=>0,   "url"=>"inicio/principal",  "subitems"=>array())
 );
 ?>

@@ -112,12 +112,12 @@ function html_head_basictags($urlBase,$title,$appCss=array("/css/basicos.css"),$
     $basicHeaderTags.=html_head_link($urlBase.$favicon,"apple-toich-icon",array("sizes"=>"120x120"));
     $basicHeaderTags.=html_head_link($urlBase.$favicon,"apple-toich-icon",array("sizes"=>"144x144"));
     $basicHeaderTags.=html_head_link($urlBase.$favicon,"apple-toich-icon",array("sizes"=>"152x152"));
-    $basicHeaderTags.=html_head_link($urlBase."/css/bootstrap.min.css");
+    $basicHeaderTags.=html_head_link($urlBase."/bootstrap/css/bootstrap.min.css");
     $basicHeaderTags.=html_head_link($urlBase."/css/jquery.msg.css");
     $basicHeaderTags.=html_head_link($urlBase."/css/dataTables.bootstrap.min.css");
     foreach($appCss as $css) $basicHeaderTags.=html_head_link($urlBase.$css);
     $basicHeaderTags.=html_head_script($urlBase."/js/jquery-2.2.1.min.js");
-    $basicHeaderTags.=html_head_script($urlBase."/js/bootstrap.min.js");
+    $basicHeaderTags.=html_head_script($urlBase."/bootstrap/js/bootstrap.min.js");
     /*$basicHeaderTags.='
         <!--[if lt IE 9]>
             '.
