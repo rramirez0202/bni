@@ -5,7 +5,7 @@ $sitename=isset($sitename)?$sitename:"";
 <?php if($link2Principal!=""): ?>
     <a href="<?= $link2Principal; ?>">
 <?php endif; ?>
-    <img src="<?= base_url("project_files/system/img/logo.png")?>" alt="<?= $sitename; ?>" title="<?= $sitename ?>" height="100">
+    <img class="img-rounded" src="<?= base_url("project_files/system/img/logo.png")?>" alt="<?= $sitename; ?>" title="<?= $sitename ?>">
     <h1 id="siteTitle"><?= $sitename; ?></h1>
 <?php if($link2Principal!=""): ?>
     </a>

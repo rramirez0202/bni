@@ -46,7 +46,7 @@ $div=intval(100/count($bg));
 </style>
 <div class="frmacceso">
     <div class="frmacceso_logo">
-        <img src="<?= base_url('project_files/system/img/logo.png'); ?>" />
+        <img src="<?= base_url('project_files/system/img/logo_login.png'); ?>" />
     </div>
     <form id="frmacceso" role="form" onsubmit="return false">
         <div class="form-group">
