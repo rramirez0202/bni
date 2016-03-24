@@ -5,7 +5,7 @@ class Inicio extends CI_Controller
     {
         $body=$this->load->view("html/body",array(
             "sectionBody"=>$this->load->view("inicio/login",array(),true),
-            "footer"=>"BNI Centro. Todos los Derechos Reservados"
+            "footer"=>$this->config->item('footer')
             ),true);
         $this->load->view("html/html",array(
             "head"=>html_head_basictags(
