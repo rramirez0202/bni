@@ -1,3 +1,10 @@
+<script type="text/javascript">
+    (function(){
+        if(location.host.indexOf("dev")>-1||location.host.indexOf("www")>-1)
+            return true;
+        location.href = location.protocol + "www." + location.host + location.pathname;
+    })();
+</script>
 <?php
 $bg=array();
 $dir=dir("./project_files/system/img/background");

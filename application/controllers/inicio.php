@@ -23,7 +23,7 @@ class Inicio extends CI_Controller
             "header"=>$this->load->view("html/header",array("link2Principal"=>base_url(),"sitename"=>$this->config->item('appsitename')),true),
             "nav"=>$this->load->view("html/nav",array("currentItems"=>array("1")),true),
             "sectionBody"=>$this->load->view("inicio/principal",array(),true),
-            "footer"=>$this->config->item('footer')
+            "footer"=>""//$this->config->item('footer')
             ),true);
         $this->load->view("html/html",array(
             "head"=>html_head_basictags(
