@@ -2,7 +2,7 @@
     (function(){
         if(location.host.indexOf("dev")>-1||location.host.indexOf("www")>-1)
             return true;
-        location.href = location.protocol + "www." + location.host + location.pathname;
+        location.href = '<?= base_url(); ?>' + location.pathname;
     })();
 </script>
 <?php
@@ -58,17 +58,17 @@ $div=intval(100/count($bg));
     <form id="frmacceso" role="form" onsubmit="return false">
         <div class="form-group">
             <label for="frmacceso_usr">Usuario:</label>
-            <input type="text" class="form-control" id="frmacceso_usr" name="frmacceso_usr" maxlength="250" />
+            <input type="text" class="form-control" id="frmacceso_usr" name="frmacceso_usr" maxlength="250" required="required" />
         </div>
         <div class="form-group">
             <label for="frmacceso_pwd">Contraseña:</label>
-            <input type="password" class="form-control" id="frmacceso_pwd" name="frmacceso_pwd" maxlength="250" />
+            <input type="password" class="form-control" id="frmacceso_pwd" name="frmacceso_pwd" maxlength="250" required="required" />
         </div>
         <div class="form-group centro">
             <a href="#">¿Olvido su contraseña?</a>
         </div>
         <div class="form-group">
-            <button type="button" class="btn btn-primary btn-block" onclick="location.href='<?= base_url('inicio/principal'); ?>'">Accesar</button>
+            <button type="button" class="btn btn-primary btn-block" onclick="$('#frmacceso_usr').val()=='admin'&&$('#frmacceso_pwd').val()=='admin'?location.href='<?= base_url('inicio/principal'); ?>':Alert('Usuario/contraseña incorrectos',function(){return false;})">Accesar</button>
         </div>
     </form>
 </div>

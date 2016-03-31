@@ -5,6 +5,8 @@
 @font-face{ font-family: 'ManoAlzada2'; src: url('fonts/PatrickHand-Regular.ttf');}
 @font-face{ font-family: 'ManoAlzada3'; src: url('fonts/MarckScript-Regular.ttf');}
 @font-face{ font-family: 'MonoEspaciado'; src: url('fonts/RobotoMono-Regular.ttf');}
+@font-face{ font-family: 'Code128'; src: url('fonts/code128.ttf');}
+@font-face{ font-family: 'Code39r'; src: url('fonts/Code39r.ttf');}
 body
 {
     color: rgb(108,0,6);
@@ -74,6 +76,10 @@ h1, h2, h3, h4, h5, h6
     margin: 0px;
     color: rgb(255,229,229);
 }
+#barraNavegacion h3
+{
+    font-size: 130%;
+}
 #barraNavegacion li.active a h1, #barraNavegacion li.active a h2, #barraNavegacion li.active a h3, #barraNavegacion li.active a h4, #barraNavegacion li.active a h5, #barraNavegacion li.active a h6
 {
     color: rgb(108,0,6);
@@ -117,4 +123,11 @@ h1, h2, h3, h4, h5, h6
 #panelesiniciales div.panel-body
 {
     overflow: auto;
+    max-height: 500px;
+}
+.Code128
+{
+    font-family: Code128;
+    font-size: 200%;
+    vertical-align: middle;
 }

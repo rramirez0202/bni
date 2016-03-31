@@ -1,6 +1,7 @@
 <?php
 class Inicio extends CI_Controller
 {
+    private $itemNavBar=array("1");
     public function index()
     {
         $body=$this->load->view("html/body",array(
@@ -21,7 +22,7 @@ class Inicio extends CI_Controller
     {
         $body=$this->load->view("html/body",array(
             "header"=>$this->load->view("html/header",array("link2Principal"=>base_url(),"sitename"=>$this->config->item('appsitename')),true),
-            "nav"=>$this->load->view("html/nav",array("currentItems"=>array("1")),true),
+            "nav"=>$this->load->view("html/nav",array("currentItems"=>$this->itemNavBar),true),
             "sectionBody"=>$this->load->view("inicio/principal",array(),true),
             "footer"=>""//$this->config->item('footer')
             ),true);
