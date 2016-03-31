@@ -2,7 +2,7 @@ function Alert(mensaje,afterOk) //msgID: 1 Deprecated
 {
 	$.msg({
 		autoUnblock : 	false,
-		bgPath : 		baseURL+'project_files/msg/',
+		bgPath : 		baseURL+'project_files/css/',
         clickUnblock : 	false,
 		content:		'<div>'+mensaje+'</div><div style="text-align: center;"><button id="btnOk" class="btn btn-success">Aceptar</button></div>',
 		afterBlock:		function(){
@@ -19,7 +19,7 @@ function Confirm(mensaje,afterOk) //msgID: 2 Deprecated
 {
 	$.msg({
 		autoUnblock : 	false,
-		bgPath : 		baseURL+'project_files/msg/',
+		bgPath : 		baseURL+'project_files/css/',
         clickUnblock : 	false,
 		content:		'<div>'+mensaje+'</div><div style="text-align: center;"><button id="btnOk" class="btn btn-success">Aceptar</button> <button id="btnCancel" class="btn btn-danger">Cancelar</button></div>',
 		afterBlock : 	function(){
@@ -39,7 +39,7 @@ function Mensaje(mensaje) //msgID: 3
 {
 	$.msg({
 		autoUnblock : 	false,
-		bgPath : 		baseURL+'project_files/msg/',
+		bgPath : 		baseURL+'project_files/css/',
         clickUnblock : 	false,
 		content:		mensaje,
 		msgID:			3
@@ -49,7 +49,7 @@ function MensajeAfter(mensaje,afterOk) //msgID: 4
 {
 	$.msg({
 		autoUnblock : 	false,
-		bgPath : 		baseURL+'project_files/msg/',
+		bgPath : 		baseURL+'project_files/css/',
         clickUnblock : 	false,
 		content:		mensaje,
 		afterBlock:		function(){
@@ -345,3 +345,471 @@ function estandarizaTamanio()
             $("#pageFooter").css('top',parseInt($("#pageSuperBodyContainer").css('top').replace("px",""))+altoPageSuperBodyContainer+"px");
     }
 }
+
+function fnAppExec()
+{
+    this.ButtonPanelToggle=function(btnPadre)
+    {
+        $(btnPadre.getElementsByTagName('span')[0]).toggle();
+        $(btnPadre.getElementsByTagName('span')[1]).toggle();
+    }
+}
+
+function fnCatalogo()
+{
+	this.FrmAdd=function()
+	{
+		var div=$("<div id='newData'>Ingrese los valores a agregar en el catálogo:</div>");
+		for(var x=1;x<=10;x++)
+		{
+			div.append($('<br /><input type="text" name="valor[]" id="valor[]" maxlength="250" size="35" />'))
+		}
+		Confirm(div[0].outerHTML,function(){
+			Catalogo.Add();
+		});
+	}
+	this.Add=function()
+	{
+		var param=new Array();
+		$("#newData input").each(function(){
+			if(this.value.trim()!="")
+                param.push(this.value.trim());
+		});
+        if(param.length==0) return false;
+		$.post(baseURL+"catalogo/addoption/"+catname,{'valor[]':param},function(resp){
+            if(resp.resultado) eval(resp.codigojs);
+            else
+            {
+                if(resp.mensaje.tipo=="alert") Alert(resp.mensaje.texto,function(){eval(resp.codigojs);});
+            }
+        },'json')
+        .fail(function(jqxhr,textStatus,error){
+            if(jqxhr.status!=200)
+            {
+                var err="Error al almacenar los datos<br />Error "+jqxhr.status+": "+jqxhr.statusText;
+                setTimeout(function(){Alert(err,function(){return true;});},500);
+            }
+            else setTimeout(function(){Alert(jqxhr.responseText,function(){return true;});},500);
+        });
+	}
+	this.FrmDel=function()
+	{
+        var id=new Array();
+        $("#tblelementos input").each(function(){
+            if(this.checked)
+                id.push(this.value);
+        });
+        if(id.length==0)
+            Alert("Debe seleccionar al menos un elemento para eliminar",function(){return true;});
+        else
+		    Confirm("¿Realmente desea eliminar elo elementos seleccionados?",function(){Catalogo.Del();});
+	}
+	this.Del=function()
+	{
+		var id=new Array();
+        $("#tblelementos input").each(function(){
+            if(this.checked)
+                id.push(this.value);
+        });
+        $.post(baseURL+"catalogo/deloption/"+catname,{'id[]':id},function(resp){
+            if(resp.resultado) eval(resp.codigojs);
+            else
+            {
+                if(resp.mensaje.tipo=="alert") Alert(resp.mensaje.texto,function(){eval(resp.codigojs);});
+            }
+        },'json')
+        .fail(function(jqxhr,textStatus,error){
+            if(jqxhr.status!=200)
+            {
+                var err="Error al eliminar los datos<br />Error "+jqxhr.status+": "+jqxhr.statusText;
+                setTimeout(function(){Alert(err,function(){return true;});},500);
+            }
+            else setTimeout(function(){Alert(jqxhr.responseText,function(){return true;});},500);
+        });
+	}
+	this.FrmUpd=function()
+	{
+		var div=$("<div id='newData'>Ingrese los nuevos valores:</div>");
+        var elems=false;
+        $("#tblelementos input").each(function(){
+            if(this.checked)
+            {
+                var fila=$(this).parent().parent();
+                var valor=fila.children()[1].innerHTML;
+                div.append($('<br /><input type="text" name="valor[]" id="valor[]" maxlength="250" size="35" value="'+valor+'" />'))
+                elems=true;
+            }
+        });
+        if(!elems)
+            Alert("Debe seleccionar al menos un elemento para actualizar.",function(){return true;})
+        else
+            Confirm(div[0].outerHTML,function(){Catalogo.Upd();});
+	}
+	this.Upd=function()
+	{
+		var param=new Array();
+        var id=new Array();
+        $("#newData input").each(function(){
+            param.push(this.value.trim());
+        });
+        $("#tblelementos input").each(function(){
+            if(this.checked)
+                id.push(this.value);
+        });
+        $.post(baseURL+"catalogo/updoption/"+catname,{'valor[]':param,'id[]':id},function(resp){
+            if(resp.resultado) eval(resp.codigojs);
+            else
+            {
+                if(resp.mensaje.tipo=="alert") Alert(resp.mensaje.texto,function(){eval(resp.codigojs);});
+            }
+        },'json')
+        .fail(function(jqxhr,textStatus,error){
+            if(jqxhr.status!=200)
+            {
+                var err="Error al actualizar los datos<br />Error "+jqxhr.status+": "+jqxhr.statusText;
+                setTimeout(function(){Alert(err,function(){return true;});},500);
+            }
+            else setTimeout(function(){Alert(jqxhr.responseText,function(){return true;});},500);
+        });
+	}
+}
+
+var auxFnPermiso=null;
+function fnPermiso()
+{
+    this.CapturaNuevos=function()
+    {
+        auxFnPermiso=new Array();
+        $("#elementosMenu input").each(function(){
+            if(this.checked)
+            {
+                auxFnPermiso.push({
+                    id:this.value,
+                    per:$($(this).parent().parent().children()[0]).text(),
+                    desc:$($(this).parent().parent().children()[1]).text()
+                });
+                this.checked=false;
+            }
+        });
+        if(auxFnPermiso.length>0)
+            this.FrmAdd(auxFnPermiso.shift());
+        else
+            Alert("Debe seleccionar un elemento para anidar los permisos.",function(){return true;});
+    }
+    this.FrmAdd=function(permiso)
+    {
+        var divFrmCont=$('<div></div>');
+        divFrmCont.append($('<h3>'+permiso.per+'</h3>'));
+        divFrmCont.append($('<div>'+permiso.desc+'</div>'));
+        var frm=$('<form id="elementosMenuFrm"></form>');
+        frm.append($('<input type="hidden" name="idpermiso" id="idpermiso" value="'+permiso.id+'" />'));
+        var tbody=$('<tbody></tbody>');
+        for(var x=1;x<=5;x++)
+        {
+            var p=$('<td><input type="text" name="elemento'+x+'" id="elemento'+x+'" value="" /></td>');
+            var d=$('<td><input type="text" name="descripcion'+x+'" id="descripcion'+x+'" value="" /></td>');
+            var tr=$('<tr></tr>');
+            p.appendTo(tr);
+            d.appendTo(tr);
+            tr.appendTo(tbody);
+        }
+        frm.append($('<div class="table-responsive"><table class="table table-striped table-hover"><thead><tr><th>Nombre</th><th>Descripción</th></tr></thead><tbody>'+tbody.html()+'</tbody></table></div>'));
+        divFrmCont.append(frm);
+        Confirm(divFrmCont.html(),function(){Permiso.Add();});
+    }
+    this.Add=function()
+    {
+        $.post(baseURL+"permisos/add",$("#elementosMenuFrm").serialize(),function(resp){
+            if(resp.resultado) eval(resp.codigojs);
+            else
+            {
+                if(resp.mensaje.tipo=="alert") Alert(resp.mensaje.texto,function(){eval(resp.codigojs);});
+            }
+        },'json')
+        .fail(function(jqxhr,textStatus,error){
+            if(jqxhr.status!=200)
+            {
+                var err="Error al guardar los datos<br />Error "+jqxhr.status+": "+jqxhr.statusText;
+                setTimeout(function(){Alert(err,function(){return true;});},500);
+            }
+            else setTimeout(function(){Alert(jqxhr.responseText,function(){return true;});},500);
+        });
+    }
+    this.CapturaUpd=function()
+    {
+        auxFnPermiso=new Array();
+        $("#elementosMenu input").each(function(){
+            if(this.checked)
+            {
+                auxFnPermiso.push({
+                    id:this.value,
+                    per:$($(this).parent().parent().children()[0]).text(),
+                    desc:$($(this).parent().parent().children()[1]).text()
+                });
+                this.checked=false;
+            }
+        });
+        if(auxFnPermiso.length>0)
+            this.FrmUpd(auxFnPermiso.shift());
+        else
+            Alert("Debe seleccionar un elemento para actualizar.",function(){return true;});
+    }
+    this.FrmUpd=function(permiso)
+    {
+        var divFrmCont=$('<div></div>');
+        divFrmCont.append($('<h3>'+permiso.per+'</h3>'));
+        divFrmCont.append($('<div>'+permiso.desc+'</div>'));
+        var frm=$('<form id="elementosMenuFrm"></form>');
+        frm.append($('<input type="hidden" name="idpermiso" id="idpermiso" value="'+permiso.id+'" />'));
+        var tbody=$('<tbody></tbody>');
+        var p=$('<td><input type="text" name="elemento" id="elemento" value="" /></td>');
+        var d=$('<td><input type="text" name="descripcion" id="descripcion" value="" /></td>');
+        var tr=$('<tr></tr>');
+        p.appendTo(tr);
+        d.appendTo(tr);
+        tr.appendTo(tbody);
+        frm.append($('<div class="table-responsive"><table class="table table-striped table-hover"><thead><tr><th>Nombre</th><th>Descripción</th></tr></thead><tbody>'+tbody.html()+'</tbody></table></div>'));
+        divFrmCont.append(frm);
+        Confirm(divFrmCont.html(),function(){Permiso.Upd();});
+    }
+    this.Upd=function()
+    {
+        $.post(baseURL+"permisos/upd",$("#elementosMenuFrm").serialize(),function(resp){
+            if(resp.resultado) eval(resp.codigojs);
+            else
+            {
+                if(resp.mensaje.tipo=="alert") setTimeout(function(){Alert(resp.mensaje.texto,function(){eval(resp.codigojs);});},500);
+            }
+        },'json')
+        .fail(function(jqxhr,textStatus,error){
+            if(jqxhr.status!=200)
+            {
+                var err="Error al guardar los datos<br />Error "+jqxhr.status+": "+jqxhr.statusText;
+                setTimeout(function(){Alert(err,function(){return true;});},500);
+            }
+            else setTimeout(function(){Alert(jqxhr.responseText,function(){return true;});},500);
+        });
+    }
+    this.FrmDel=function()
+    {
+        auxFnPermiso=new Array();
+        $("#elementosMenu input").each(function(){
+            if(this.checked)
+            {
+                auxFnPermiso.push(this.value);
+                this.checked=false;
+            }
+        });
+        if(auxFnPermiso.length>0)
+            Confirm("¿Realmente desea eliminar los permisos seleccionados?",function(){Permiso.Del(auxFnPermiso.shift());});
+        else
+            Alert("Debe seleccionar un elemento para eliminar.",function(){return true;});
+    }
+    this.Del=function(permiso)
+    {
+        $.post(baseURL+"permisos/del",{idpermiso:permiso},function(resp){
+            if(resp.resultado) eval(resp.codigojs);
+            else
+            {
+                if(resp.mensaje.tipo=="alert") setTimeout(function(){Alert(resp.mensaje.texto,function(){eval(resp.codigojs);});},500);
+            }
+        },'json')
+        .fail(function(jqxhr,textStatus,error){
+            if(jqxhr.status!=200)
+            {
+                var err="Error al guardar los datos<br />Error "+jqxhr.status+": "+jqxhr.statusText;
+                setTimeout(function(){Alert(err,function(){return true;});},500);
+            }
+            else setTimeout(function(){Alert(jqxhr.responseText,function(){return true;});},500);
+        });
+    }
+}
+
+function fnPerfil()
+{
+    this.ValidaFrmIn=function()
+    {
+        if(Validacion.Vacio('frm_perfil_nombre','Debe ingresar el nombre del perfil.'))
+            return false;
+        return true;
+    }
+    this.Enviar=function(nuevo)
+    {
+        if(this.ValidaFrmIn())
+        {
+            var urlFrm=baseURL+"perfiles/"+(nuevo===true?'add':'upd');
+            Mensaje("Guardando datos");
+            $.post(urlFrm,$("#frm_perfil").serialize(),function(resp){
+                $.msg('unblock',10,3);
+                if(resp.resultado) eval(resp.codigojs);
+                else
+                {
+                    if(resp.mensaje.tipo=="alert") setTimeout(function(){Alert(resp.mensaje.texto,function(){eval(resp.codigojs);});},500);
+                }
+            },'json')
+            .fail(function(jqxhr,textStatus,error){
+                $.msg('unblock',10,3);
+                if(jqxhr.status!=200)
+                {
+                    var err="Error al guardar los datos<br />Error "+jqxhr.status+": "+jqxhr.statusText;
+                    setTimeout(function(){Alert(err,function(){return true;});},500);
+                }
+                else setTimeout(function(){Alert(jqxhr.responseText,function(){return true;});},500);
+            });
+        }
+    }
+    this.Eliminar=function(id)
+    {
+        Confirm("¿Realmente desea eliminar este perfil?",function(){
+            var urlFrm=baseURL+"perfiles/del/"+id;
+            $.post(urlFrm,{},function(resp){
+                if(resp.resultado) eval(resp.codigojs);
+                else
+                {
+                    if(resp.mensaje.tipo=="alert") setTimeout(function(){Alert(resp.mensaje.texto,function(){eval(resp.codigojs);});},500);
+                }
+            },'json')
+            .fail(function(jqxhr,textStatus,error){
+                if(jqxhr.status!=200)
+                {
+                    var err="Error al guardar los datos<br />Error "+jqxhr.status+": "+jqxhr.statusText;
+                    setTimeout(function(){Alert(err,function(){return true;});},500);
+                }
+                else setTimeout(function(){Alert(jqxhr.responseText,function(){return true;});},500);
+            });
+        });
+    }
+}
+function fnPersona()
+{
+    this.FrmAddTelefono=function()
+    {
+        var div=$('<div>Agregar Teléfono<br /></div>');
+        var select=$('<select id="tipo"></select>');
+        for(var x=0;x<tipotelefono.length;x++)
+            select.append($('<option value="'+tipotelefono[x].idtipotelefono+'">'+tipotelefono[x].valor+'</option>'));
+        div.append(select);
+        div.append($('<span>&nbsp;</span>'))
+        div.append($('<input type="tel" id="valor" />'));
+        div.append($('<hr />'));
+        Confirm(div.html(),function(){
+            Persona.AddTelefono();
+        });
+    }
+    this.FrmAddCorreo=function()
+    {
+        var div=$('<div>Agregar Correo<br /></div>');
+        var select=$('<select id="tipo"></select>');
+        for(var x=0;x<tipocorreo.length;x++)
+            select.append($('<option value="'+tipocorreo[x].idtipocorreo+'">'+tipocorreo[x].valor+'</option>'));
+        div.append(select);
+        div.append($('<span>&nbsp;</span>'))
+        div.append($('<input type="email" id="valor" />'));
+        div.append($('<hr />'));
+        Confirm(div.html(),function(){
+            Persona.AddCorreo();
+        });
+    }
+    this.AddTelefono=function()
+    {
+        var tbl=$("#persona_telefonos");
+        var fila=$('<tr><td></td><td></td><td></td></tr>');
+        fila.children()[0].innerHTML=$("#tipo")[0].options[$("#tipo")[0].selectedIndex].innerHTML;
+        fila.children()[1].innerHTML=$("#valor").val();
+        $(fila.children()[2]).append($('<button type="button" class="btn btn-default btn-xs pull-right" onclick="Persona.DelTelefono(this)"><span class="glyphicon glyphicon-remove"></span></button>'));
+        $(fila.children()[2]).append($('<input type="hidden" name="frm_telefono_idtipotelefono[]" id="frm_telefono_idtipotelefono[]" value="'+$("#tipo").val()+'" />'));
+        $(fila.children()[2]).append($('<input type="hidden" name="frm_telefono_valor[]" id="frm_telefono_valor[]" value="'+$("#valor").val()+'" />'));
+        tbl.append(fila);
+    }
+    this.AddCorreo=function()
+    {
+        var tbl=$("#persona_correos");
+        var fila=$('<tr><td></td><td></td><td></td></tr>');
+        fila.children()[0].innerHTML=$("#tipo")[0].options[$("#tipo")[0].selectedIndex].innerHTML;
+        fila.children()[1].innerHTML=$("#valor").val();
+        $(fila.children()[2]).append($('<button type="button" class="btn btn-default btn-xs pull-right" onclick="Persona.DelCorreo(this)"><span class="glyphicon glyphicon-remove"></span></button>'));
+        $(fila.children()[2]).append($('<input type="hidden" name="frm_correo_idtipocorreo[]" id="frm_correo_idtipocorreo[]" value="'+$("#tipo").val()+'" />'));
+        $(fila.children()[2]).append($('<input type="hidden" name="frm_correo_valor[]" id="frm_correo_valor[]" value="'+$("#valor").val()+'" />'));
+        tbl.append(fila);
+    }
+    this.DelTelefono=function(btn)
+    {
+        $(btn).parent().parent().remove();
+    }
+    this.DelCorreo=function(btn)
+    {
+        $(btn).parent().parent().remove();
+    }
+    this.ValidaFrmIn=function()
+    {
+        if(Validacion.Vacio('frm_persona_nombre','Debe ingresar el nombre.'))
+            return false;
+        if(Validacion.Vacio('frm_persona_apaterno','Debe ingresar el apellido paterno.'))
+            return false;
+        if(Validacion.Vacio('frm_persona_codigobarras','Debe ingresar el codigo de barras.'))
+            return false;
+        return true;
+    }
+    this.Enviar=function(nuevo)
+    {
+        if(this.ValidaFrmIn())
+        {
+            var urlFrm=baseURL+"personas/"+(nuevo===true?'add':'upd');
+            Mensaje("Guardando datos");
+            var form=new FormData($("#frm_persona")[0]);
+            $.ajax({
+                url:urlFrm,
+                data:form,
+                processData:false,
+                contentType:false,
+                dataType:'json',
+                type:'POST'
+            })
+            .done(function(resp){
+                $.msg('unblock',10,3);
+                if(resp.resultado) eval(resp.codigojs);
+                else
+                {
+                    if(resp.mensaje.tipo=="alert") setTimeout(function(){Alert(resp.mensaje.texto,function(){eval(resp.codigojs);});},500);
+                }
+            })
+            .fail(function(jqxhr,textStatus,error){
+                $.msg('unblock',10,3);
+                if(jqxhr.status!=200)
+                {
+                    var err="Error al guardar los datos<br />Error "+jqxhr.status+": "+jqxhr.statusText;
+                    setTimeout(function(){Alert(err,function(){return true;});},500);
+                }
+                else setTimeout(function(){Alert(jqxhr.responseText,function(){return true;});},500);
+            });
+        }
+    }
+    this.Eliminar=function(id)
+    {
+        Confirm("¿Realmente desea eliminar a esta persona?",function(){
+            var urlFrm=baseURL+"personas/del/"+id;
+            $.post(urlFrm,{},function(resp){
+                if(resp.resultado) eval(resp.codigojs);
+                else
+                {
+                    if(resp.mensaje.tipo=="alert") setTimeout(function(){Alert(resp.mensaje.texto,function(){eval(resp.codigojs);});},500);
+                }
+            },'json')
+            .fail(function(jqxhr,textStatus,error){
+                if(jqxhr.status!=200)
+                {
+                    var err="Error al guardar los datos<br />Error "+jqxhr.status+": "+jqxhr.statusText;
+                    setTimeout(function(){Alert(err,function(){return true;});},500);
+                }
+                else setTimeout(function(){Alert(jqxhr.responseText,function(){return true;});},500);
+            });
+        });
+    }
+}
+
+var Validacion  = new fnValidaciones();
+var AppExec     = new fnAppExec();
+var Catalogo    = new fnCatalogo();
+var Permiso     =  new fnPermiso();
+var Perfil      = new fnPerfil();
+var Persona     = new fnPersona();
